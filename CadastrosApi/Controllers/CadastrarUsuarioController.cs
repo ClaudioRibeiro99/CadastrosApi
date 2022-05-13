@@ -9,12 +9,6 @@ using CadastrosApi.Models;
 
 namespace CadastrosApi.Controllers
 {
-    public class MinhaClasse
-    {
-        public string message { get; set; }
-    }
-
-
 
     [Route("api/[controller]")]
     [ApiController]
@@ -86,28 +80,28 @@ namespace CadastrosApi.Controllers
 
             if(cadastrarUsuario.Nome == null || cadastrarUsuario.Nome == "")
             {
-                return UnprocessableEntity(new MinhaClasse() { message = "O nome é obrigatório!" });
+                return StatusCode(StatusCodes.Status422UnprocessableEntity, "O nome é obrigatório!");
             }
             if (cadastrarUsuario.Email == null)
             {
-                return UnprocessableEntity(new MinhaClasse() { message = "O Email é obrigatório!" });
+                return StatusCode(StatusCodes.Status422UnprocessableEntity, "O e-mail é obrigatório!");
             }
             if (cadastrarUsuario.Password == null)
             {
-                return UnprocessableEntity(new MinhaClasse() { message = "A senha é obrigatório!" });
+                return StatusCode(StatusCodes.Status422UnprocessableEntity, "A senha é obrigatório!");
             }
             if (cadastrarUsuario.Password != cadastrarUsuario.ConfirmarPassword)
             {
-                return UnprocessableEntity(new MinhaClasse() { message = "As senhas não conferem!" });
+                return StatusCode(StatusCodes.Status422UnprocessableEntity, "As senhas não conferem!");
             }
             if (cadastrarUsuario.Email == _context.Usuarios.FirstOrDefault().Email)
             {
-                return UnprocessableEntity(new MinhaClasse() { message = "Por favor utilize outro email!" });
+                return StatusCode(StatusCodes.Status422UnprocessableEntity, "Por favor utilize outro email!");
             }            
            
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCadastrarUsuario", new { id = cadastrarUsuario.Id }, cadastrarUsuario);
+            return StatusCode(StatusCodes.Status201Created, "Usuário criado com sucesso!");
         }
 
         // DELETE: api/CadastrarUsuarios/5
