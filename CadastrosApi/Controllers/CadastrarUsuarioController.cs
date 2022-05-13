@@ -83,11 +83,27 @@ namespace CadastrosApi.Controllers
         [HttpPost]
         public async Task<ActionResult<CadastrarUsuario>> PostCadastrarUsuario(CadastrarUsuario cadastrarUsuario)
         {
-            //if(cadastrarUsuario.Email == _context.Usuarios.FirstOrDefault().Email)
-            //{
-            //    return UnprocessableEntity(new MinhaClasse() { message = "Por favor utilize outro email!" });
-            //}
-             
+
+            if(cadastrarUsuario.Nome == null || cadastrarUsuario.Nome == "")
+            {
+                return UnprocessableEntity(new MinhaClasse() { message = "O nome é obrigatório!" });
+            }
+            if (cadastrarUsuario.Email == null)
+            {
+                return UnprocessableEntity(new MinhaClasse() { message = "O Email é obrigatório!" });
+            }
+            if (cadastrarUsuario.Password == null)
+            {
+                return UnprocessableEntity(new MinhaClasse() { message = "A senha é obrigatório!" });
+            }
+            if (cadastrarUsuario.Password != cadastrarUsuario.ConfirmarPassword)
+            {
+                return UnprocessableEntity(new MinhaClasse() { message = "As senhas não conferem!" });
+            }
+            if (cadastrarUsuario.Email == _context.Usuarios.FirstOrDefault().Email)
+            {
+                return UnprocessableEntity(new MinhaClasse() { message = "Por favor utilize outro email!" });
+            }            
            
             await _context.SaveChangesAsync();
 
